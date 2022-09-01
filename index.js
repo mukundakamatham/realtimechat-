@@ -21,7 +21,9 @@ mongoose
   .catch((err) => {
     console.log(err.message);
   });
-
+  app.get('/',async function(req,res){
+    res.send("connected happy coading...")
+})
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
