@@ -7,6 +7,7 @@ import { allUsersRoute, host } from "../utils/APIRoutes";
 import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
+import { loadData, saveData } from "../utils/localStorage";
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -15,12 +16,14 @@ export default function Chat() {
   const [currentChat, setCurrentChat] = useState(undefined);
   const [currentUser, setCurrentUser] = useState(undefined);
   useEffect(async () => {
-    if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+    
+    if (!loadData(process.env.REACT_APP_LOCALHOST_KEY)) {
       navigate("/login");
     } else {
+     
       setCurrentUser(
         await JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+          loadData(process.env.REACT_APP_LOCALHOST_KEY)
         )
       );
     }
@@ -35,8 +38,8 @@ export default function Chat() {
   useEffect(async () => {
     if (currentUser) {
       if (currentUser.isAvatarImageSet) {
-        const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-        setContacts(data.data);
+        const {data} = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+        setContacts(data);
       } else {
         navigate("/setAvatar");
       }

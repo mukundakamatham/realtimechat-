@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { loginRoute } from "../utils/APIRoutes";
-
+import { loginUser } from "../Redux/auth/action";
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isAuth,  token, isError,Errormsg } = useSelector(
+    (state) => state.auth,
+    shallowEqual
+  );
   const [values, setValues] = useState({ username: "", password: "" });
+
+
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -18,10 +24,15 @@ export default function Login() {
     theme: "dark",
   };
   useEffect(() => {
-    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+    if (isAuth) {
       navigate("/");
     }
-  }, []);
+  }, [isAuth,token]);
+  useEffect(() => {
+   if(isError&&Errormsg.length>0){
+    toast.error(Errormsg, toastOptions);
+   } 
+  }, [isError]);
 
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -43,22 +54,8 @@ export default function Login() {
     event.preventDefault();
     if (validateForm()) {
       const { username, password } = values;
-      const { data } = await axios.post(loginRoute, {
-        username,
-        password,
-      });
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
-
-        navigate("/");
-      }
-    }
+      dispatch(loginUser({ username, password }));
+    };
   };
 
   return (

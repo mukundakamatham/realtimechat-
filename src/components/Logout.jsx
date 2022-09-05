@@ -3,16 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { BiPowerOff } from "react-icons/bi";
 import styled from "styled-components";
 import axios from "axios";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { loadData, saveData } from "../utils/localStorage";
+import { logoutUser } from "../Redux/auth/action";
+
 import { logoutRoute } from "../utils/APIRoutes";
 export default function Logout() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleClick = async () => {
     const id = await JSON.parse(
-      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+      loadData(process.env.REACT_APP_LOCALHOST_KEY)
     )._id;
     const data = await axios.get(`${logoutRoute}/${id}`);
+    console.log(data,"datastest")
     if (data.status === 200) {
       localStorage.clear();
+      dispatch(logoutUser());
       navigate("/login");
     }
   };

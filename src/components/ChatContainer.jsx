@@ -5,6 +5,7 @@ import Logout from "./Logout";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
+import { loadData, saveData } from "../utils/localStorage";
 
 export default function ChatContainer({ currentChat, socket }) {
   const [messages, setMessages] = useState([]);
@@ -13,7 +14,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
   useEffect(async () => {
     const data = await JSON.parse(
-      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+              loadData(process.env.REACT_APP_LOCALHOST_KEY)
     );
     const response = await axios.post(recieveMessageRoute, {
       from: data._id,
@@ -26,7 +27,7 @@ export default function ChatContainer({ currentChat, socket }) {
     const getCurrentChat = async () => {
       if (currentChat) {
         await JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+                  loadData(process.env.REACT_APP_LOCALHOST_KEY)
         )._id;
       }
     };
@@ -35,7 +36,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
   const handleSendMsg = async (msg) => {
     const data = await JSON.parse(
-      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+              loadData(process.env.REACT_APP_LOCALHOST_KEY)
     );
     socket.current.emit("send-msg", {
       to: currentChat._id,

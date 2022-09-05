@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerRoute } from "../utils/APIRoutes";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../Redux/auth/action";
 
 export default function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isAuth,  token, isError,Errormsg } = useSelector(
+    (state) => state.auth,
+    shallowEqual
+  );
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -65,25 +70,24 @@ export default function Register() {
     event.preventDefault();
     if (handleValidation()) {
       const { email, username, password } = values;
-      const { data } = await axios.post(registerRoute, {
-        username,
-        email,
-        password,
-      });
+      
+      dispatch(registerUser({ email, username, password }));
+    };
+    
 
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
-        navigate("/");
-      }
-    }
+ 
+    
   };
-
+  useEffect(() => {
+    if (isAuth) {
+      navigate("/");
+    }
+  }, [isAuth,token]);
+  useEffect(() => {
+   if(isError&&Errormsg.length>0){
+    toast.error(Errormsg, toastOptions);
+   } 
+  }, [isError]);
   return (
     <>
       <FormContainer>
