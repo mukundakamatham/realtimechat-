@@ -31,8 +31,12 @@ const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)
 );
 const io = socket(server, {
+  maxHttpBufferSize: 1e8
+},{
+  pingTimeout: 60000
+}, {
   cors: {
-    origin: "https://realtimechatapp-bymukesh.herokuapp.com/",
+    origin: "http://localhost:3000",
     credentials: true,
   },
 });
