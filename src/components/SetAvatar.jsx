@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { setAvatarRoute } from "../utils/APIRoutes";
+import { loadData, saveData } from "../utils/localStorage";
+
 export default function SetAvatar() {
   const api = `https://api.multiavatar.com/4645646`;
   const navigate = useNavigate();
@@ -22,7 +24,7 @@ export default function SetAvatar() {
   };
 
   useEffect(async () => {
-    if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+    if (!loadData(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
   }, []);
 
@@ -31,7 +33,7 @@ export default function SetAvatar() {
       toast.error("Please select an avatar", toastOptions);
     } else {
       const user = await JSON.parse(
-        localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+        loadData(process.env.REACT_APP_LOCALHOST_KEY)
       );
 
       const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
@@ -41,8 +43,7 @@ export default function SetAvatar() {
       if (data.isSet) {
         user.isAvatarImageSet = true;
         user.avatarImage = data.image;
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
+        saveData( process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(user)
         );
         navigate("/");

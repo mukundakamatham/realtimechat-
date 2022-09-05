@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
+import { loadData, saveData } from "../utils/localStorage";
 
 export default function Contacts({ contacts, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
@@ -8,10 +9,10 @@ export default function Contacts({ contacts, changeChat }) {
   const [currentSelected, setCurrentSelected] = useState(undefined);
   useEffect(async () => {
     const data = await JSON.parse(
-      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+      loadData(process.env.REACT_APP_LOCALHOST_KEY)
     );
-    setCurrentUserName(data.username);
-    setCurrentUserImage(data.avatarImage);
+    setCurrentUserName(data?.username);
+    setCurrentUserImage(data?.avatarImage);
   }, []);
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
@@ -19,7 +20,7 @@ export default function Contacts({ contacts, changeChat }) {
   };
   return (
     <>
-      {currentUserImage && currentUserImage && (
+         {currentUserImage && currentUserImage && (
         <Container>
           <div className="brand">
             <img src={Logo} alt="logo" />
