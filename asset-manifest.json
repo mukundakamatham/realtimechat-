@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "https://glacial-shore-45790.herokuapp.com/static/css/main.38fdc94e.css",
+    "main.js": "https://glacial-shore-45790.herokuapp.com/static/js/main.353c23f9.js",
+    "static/media/robot.gif": "https://glacial-shore-45790.herokuapp.com/static/media/robot.0617a41936621e9697cd.gif",
+    "static/media/loader.gif": "https://glacial-shore-45790.herokuapp.com/static/media/loader.b40fc3d91ff1f4db53e2.gif",
+    "static/media/logo.svg": "https://glacial-shore-45790.herokuapp.com/static/media/logo.ccfbd90732828204fa6989c0f15638c0.svg",
+    "index.html": "https://glacial-shore-45790.herokuapp.com/index.html",
+    "main.38fdc94e.css.map": "https://glacial-shore-45790.herokuapp.com/static/css/main.38fdc94e.css.map",
+    "main.353c23f9.js.map": "https://glacial-shore-45790.herokuapp.com/static/js/main.353c23f9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.38fdc94e.css",
+    "static/js/main.353c23f9.js"
+  ]
+}
